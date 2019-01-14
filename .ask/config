@@ -1,0 +1,43 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.a899295f-4217-4edf-b66d-16b832e2b2b1",
+      "was_cloned": false,
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "ask-custom-Astro_Eye-default"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "manifest": {
+          "eTag": "bae5f9efa3f5a9126362d9ec2a011207"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "9275aad27c81bf98d449d54ceaaa7f5f"
+          }
+        },
+        "lambda": [
+          {
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:431009295608:function:ask-custom-Astro_Eye-default",
+            "awsRegion": "us-east-1",
+            "codeUri": "lambda/custom",
+            "functionName": "ask-custom-Astro_Eye-default",
+            "handler": "index.handler",
+            "revisionId": "1c4e3900-a119-431a-8011-df5fa2636c60",
+            "runtime": "nodejs8.10"
+          }
+        ]
+      }
+    }
+  }
+}
