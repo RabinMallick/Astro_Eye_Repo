@@ -63,7 +63,7 @@ const AboutHandler = {
 const EyeIntentHandler = {
     canHandle(handlerInput) {
         const request = handlerInput.requestEnvelope.request;
-
+        console.log(request.intent.name);
         return request.type === 'IntentRequest' && request.intent.name === 'EyeIntent';
     },
     handle(handlerInput) {
