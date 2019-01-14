@@ -78,7 +78,10 @@ const EyeIntentHandler = {
         // sessionAttributes.restaurant = restaurant.name;
         // const speechOutput = `For a great coffee shop, I recommend, ${restaurant.name}. Would you like to hear more?`;
         let speechOutput = "";
-        if(direction == "left" || direction == "right"){
+        if(direction == "left"){
+            speechOutput = "Looking "+direction;
+        }
+        else if(direction == "right"){
             speechOutput = "Looking "+direction;
         }
         else if(direction == "blink"){
