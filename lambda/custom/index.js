@@ -1,19 +1,6 @@
-/* eslint-disable  func-names */
-/* eslint-disable  no-console */
-/* eslint-disable  no-use-before-define */
-
-
-// City Guide: A sample Alexa Skill Lambda function
-//  This function shows how you can manage data in objects and arrays,
-//   choose a random recommendation,
-//   call an external API and speak the result,
-//   handle YES/NO intents with session attributes,
-//   and return text data on a card.
-
 const Alexa = require('ask-sdk-core');
 const i18n = require('i18next');
 const sprintf = require('i18next-sprintf-postprocessor');
-const https = require('https');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -67,16 +54,13 @@ const EyeIntentHandler = {
         return request.type === 'IntentRequest' && request.intent.name === 'EyeIntent';
     },
     handle(handlerInput) {
-        /// const attributesManager = handlerInput.attributesManager;
+
         const responseBuilder = handlerInput.responseBuilder;
         const direction = handlerInput.requestEnvelope.request.intent.slots.direction.value;
         console.log("Value : ");
         console.log(direction);
 
-        // const sessionAttributes = attributesManager.getSessionAttributes();
-        // const restaurant = randomArrayElement(getRestaurantsByMeal('coffee'));
-        // sessionAttributes.restaurant = restaurant.name;
-        // const speechOutput = `For a great coffee shop, I recommend, ${restaurant.name}. Would you like to hear more?`;
+        
         let speechOutput = "";
         if(direction == "left"){
             speechOutput = "Looking "+direction;
@@ -93,19 +77,6 @@ const EyeIntentHandler = {
     },
 };
 
-const WalkIntentHandler ={
-    canHandle(handlerInput){
-        const request = handlerInput.requestEnvelope.request;
-        return request.type = 'IntentRequest' && request.intent.name === "WalkIntent";
-    },
-    handle(handlerInput){
-        const responseBuilder = handlerInput.responseBuilder;
-
-        let speechOutput = " Walking ....";
-        let speech = "Any more isntruction ?";
-        return responseBuilder.speak(speechOutput).reprompt(speech).getResponse();
-    }
-}
 
 const YesHandler = {
     canHandle(handlerInput) {
@@ -114,42 +85,16 @@ const YesHandler = {
         return request.type === 'IntentRequest' && request.intent.name === 'AMAZON.YesIntent';
     },
     handle(handlerInput) {
-        const attributesManager = handlerInput.attributesManager;
         const responseBuilder = handlerInput.responseBuilder;
-
-        const sessionAttributes = attributesManager.getSessionAttributes();
-        const restaurantName = sessionAttributes.restaurant;
-        const restaurantDetails = getRestaurantByName(restaurantName);
         const speechOutput = `Say again to do something with my eyes.`;
-
-        const card = `${restaurantDetails.name}\n${restaurantDetails.address}\n$
-        {data.city}, ${data.state} ${data.postcode}\nphone: ${restaurantDetails.phone}\n`;
 
         return responseBuilder
             .speak(speechOutput)
-            .withSimpleCard(SKILL_NAME, card)
             .getResponse();
     },
 };
 
-const GoOutHandler = {
-    canHandle(handlerInput) {
-        const request = handlerInput.requestEnvelope.request;
 
-        return request.type === 'IntentRequest' && request.intent.name === 'GoOutIntent';
-    },
-    handle(handlerInput) {
-        return new Promise((resolve) => {
-            getWeather((localTime, currentTemp, currentCondition) => {
-                const speechOutput = `It is ${localTime
-                } and the weather in ${data.city
-                } is ${
-                    currentTemp} and ${currentCondition}`;
-                resolve(handlerInput.responseBuilder.speak(speechOutput).getResponse());
-            });
-        });
-    },
-};
 
 const HelpHandler = {
     canHandle(handlerInput) {
@@ -259,7 +204,7 @@ const languageStrings = {
         translation: {
             WELCOME: 'Hi I am Astro Robo.',
             HELP: 'Say look left, look right or blink. ',
-            ABOUT: 'Astro Robo is a project on progress.',
+            ABOUT: 'Astro is a 4 legged Robot. A project by Ghost robotics and is on progress.',
             STOP: 'Okay, see you next time!',
         },
     },
@@ -338,8 +283,8 @@ const data = {
     ],
 };
 
-const SKILL_NAME = 'Gloucester Guide';
-const FALLBACK_MESSAGE = `The ${SKILL_NAME} skill can\'t help you with that.  It can help you learn about Gloucester if you say tell me about this place. What can I help you with?`;
+const SKILL_NAME = 'Astro Eye';
+const FALLBACK_MESSAGE = `The ${SKILL_NAME} skill can\'t help you with that.  It can help you learn about astro, move it's eyes and blink.`;
 const FALLBACK_REPROMPT = 'What can I help you with?';
 
 
@@ -353,67 +298,6 @@ const myAPI = {
     path: `/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22${encodeURIComponent(data.city)}%2C%20${data.state}%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys`,
     method: 'GET',
 };
-
-function getRestaurantsByMeal(mealType) {
-    const list = [];
-    for (let i = 0; i < data.restaurants.length; i += 1) {
-        if (data.restaurants[i].meals.search(mealType) > -1) {
-            list.push(data.restaurants[i]);
-        }
-    }
-    return list;
-}
-
-function getRestaurantByName(restaurantName) {
-    let restaurant = {};
-    for (let i = 0; i < data.restaurants.length; i += 1) {
-        if (data.restaurants[i].name === restaurantName) {
-            restaurant = data.restaurants[i];
-        }
-    }
-    return restaurant;
-}
-
-function getAttractionsByDistance(maxDistance) {
-    const list = [];
-
-    for (let i = 0; i < data.attractions.length; i += 1) {
-        if (parseInt(data.attractions[i].distance, 10) <= maxDistance) {
-            list.push(data.attractions[i]);
-        }
-    }
-    return list;
-}
-
-function getWeather(callback) {
-    const req = https.request(myAPI, (res) => {
-        res.setEncoding('utf8');
-        let returnData = '';
-
-        res.on('data', (chunk) => {
-            returnData += chunk;
-        });
-        res.on('end', () => {
-            const channelObj = JSON.parse(returnData).query.results.channel;
-
-            let localTime = channelObj.lastBuildDate.toString();
-            localTime = localTime.substring(17, 25).trim();
-
-            const currentTemp = channelObj.item.condition.temp;
-
-            const currentCondition = channelObj.item.condition.text;
-
-            callback(localTime, currentTemp, currentCondition);
-        });
-    });
-    req.end();
-}
-
-function randomArrayElement(array) {
-    let i = 0;
-    i = Math.floor(Math.random() * array.length);
-    return (array[i]);
-}
 
 const LocalizationInterceptor = {
     process(handlerInput) {
@@ -462,10 +346,8 @@ app.post('/', function (req, res) {
         .addRequestHandlers(
             LaunchHandler,
             EyeIntentHandler,
-            WalkIntentHandler,
             AboutHandler,
             YesHandler,
-            GoOutHandler,
             HelpHandler,
             StopHandler,
             FallbackHandler,
