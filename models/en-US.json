@@ -1,108 +1,78 @@
 {
   "interactionModel": {
-    "languageModel": {
-      "invocationName": "city guide",
-      "intents": [
-        {
-          "name": "AboutIntent",
-          "samples": [
-            "about",
-            "tell me about this place"
+      "languageModel": {
+          "invocationName": "astro eye",
+          "intents": [
+              {
+                  "name": "EyeIntent",
+                  "slots": [
+                      {
+                          "name": "direction",
+                          "type": "direction"
+                      }
+                  ],
+                  "samples": [
+                      "{direction}",
+                      "see {direction}",
+                      "look {direction}"
+                  ]
+              },
+              {
+                  "name": "AMAZON.YesIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.NoIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.HelpIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.StopIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.CancelIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.NavigateHomeIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AboutIntent",
+                  "slots": [],
+                  "samples": [
+                      "who is astro",
+                      "tell me about astro",
+                      "tell me more"
+                  ]
+              }
           ],
-          "slots": []
-        },
-
-        {
-          "name": "CoffeeIntent",
-          "samples": [
-            "coffee"
-          ],
-          "slots": []
-        },
-        {
-          "name": "BreakfastIntent",
-          "samples": [
-            "breakfast"
-          ],
-          "slots": []
-        },
-        {
-          "name": "LunchIntent",
-          "samples": [
-            "lunch"
-          ],
-          "slots": []
-        },
-        {
-          "name": "DinnerIntent",
-          "samples": [
-            "dinner"
-          ],
-          "slots": []
-        },
-
-        {
-          "name": "AttractionIntent",
-          "samples": [
-            "recommend an attraction",
-            "recommend an attraction within {distance} miles",
-            "give me an activity",
-            "give me an activity within {distance} miles"
-          ],
-          "slots": [
-            {
-              "name": "distance",
-              "type": "AMAZON.NUMBER",
-              "samples": []
-            }
+          "types": [
+              {
+                  "name": "direction",
+                  "values": [
+                      {
+                          "name": {
+                              "value": "blink"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "right"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "left"
+                          }
+                      }
+                  ]
+              }
           ]
-        },
-        {
-          "name": "EyeIntent",
-          "samples": [
-            "see left",
-            "see right"
-          ],
-          "slots": [
-            {
-              "name": "distance",
-              "type": "AMAZON.NUMBER",
-              "samples": []
-            }
-          ]
-        },
-
-        {
-          "name": "GoOutIntent",
-          "samples": [
-            "go out",
-            "go outside",
-            "lets go out"
-          ],
-          "slots": []
-        },
-        {
-          "name": "AMAZON.YesIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.NoIntent",
-          "samples": []
-        },
-
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.CancelIntent",
-          "samples": []
-        }
-      ]
-    }
+      }
   }
 }
